@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:ponto_app/scenes/home_screen.dart';
 
 void main() => runApp(MyApp());

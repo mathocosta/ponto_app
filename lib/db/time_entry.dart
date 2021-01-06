@@ -1,3 +1,4 @@
+import 'package:intl/intl.dart';
 import 'package:ponto_app/db/app_db.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -73,6 +74,24 @@ class TimeEntries {
     }
 
     return map;
+  }
+
+  Future<List<TimeEntry>> listOnDate(DateTime dateTime) async {
+    final Database db = await getDatabase();
+
+    final String dateText = DateFormat('yyyy-MM-dd').format(dateTime);
+
+    final List<Map<String, dynamic>> maps = await db.query(
+      TimeEntry.tableName,
+      orderBy: "datetime(${TimeEntry._createdAt}) DESC",
+      where: "DATE(${TimeEntry._createdAt}) = DATE(?)",
+      whereArgs: [dateText],
+    );
+
+    return List.generate(
+      maps.length,
+      (index) => TimeEntry.fromMap(maps[index]),
+    );
   }
 
   Future insert(TimeEntry timeEntry) async {
